@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,23 +12,28 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 5f;
     public UIDocument uiDocument;
     private Label scoreText;
+    public GameObject explosionEffect;
+    private Button restartButton;
     Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         scoreText = uiDocument.rootVisualElement.Q<Label>("ScoreLabel");
+        restartButton = uiDocument.rootVisualElement.Q<Button>("RestartButton");
+        restartButton.style.display = DisplayStyle.None;
     }
 
     void Update()
     {
         UpdateScore();
-
         MovePlayer();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Instantiate(explosionEffect, transform.position, transform.rotation);
+        restartButton.style.display = DisplayStyle.Flex;
         Destroy(gameObject);
     }
 
@@ -36,6 +42,7 @@ public class PlayerController : MonoBehaviour
         elapsedTime += Time.deltaTime;
         score = Mathf.FloorToInt(elapsedTime * scoreMultiplier);
         scoreText.text = "Score: " + score;
+        restartButton.clicked += ReloadScene;
     }
 
     void MovePlayer()
@@ -54,5 +61,10 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
             }
         }
+    }
+
+    void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -1061,6 +1061,7 @@ MonoBehaviour:
   thrustForce: 2
   maxSpeed: 5
   uiDocument: {fileID: 1734212403}
+  explosionEffect: {fileID: 8282612589516973048, guid: 95149203e24444d5195e7a2fc49b5988, type: 3}
 --- !u!1001 &757632628
 PrefabInstance:
   m_ObjectHideFlags: 0
